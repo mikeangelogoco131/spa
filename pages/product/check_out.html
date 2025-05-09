@@ -76,7 +76,7 @@
                                              loading="lazy"
                                              @error="(e) => {
                                                  console.error('Image load error:', item.product.name);
-                                                 e.target.src = '/spa/assets/default-product-image.png';
+                                                 e.target.src = '/spa/assets/cuanan5-product-image.png';
                                              }">
                                     </div>
                                     <div class="content">
@@ -211,7 +211,7 @@
                 loading: false,
                 error: null,
                 message: null,
-                baseUrl: 'http://172.17.100.14:3377/default',
+                baseUrl: 'http://172.17.100.14:3356/cuanan5',
                 avatarPreview: null,
                 errors: {},
                 paymentForm: {
@@ -419,14 +419,14 @@
                 getImageUrl(product, type = 'products') {
                     if (!product?.image_url) {
                         console.warn('No image URL for:', product?.name);
-                        return '/spa/assets/default-product-image.png';
+                        return '/spa/assets/cuanan5-product-image.png';
                     }
                     try {
                         const url = new URL(product.image_url);
                         return `${this.baseUrl}/media/${type}/${url.pathname.split('/').pop()}`;
                     } catch (e) {
                         console.error('Invalid image URL:', product?.image_url);
-                        return '/spa/assets/default-product-image.png';
+                        return '/spa/assets/cuanan5-product-image.png';
                     }
                 }
             };

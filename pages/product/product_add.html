@@ -4,263 +4,454 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product</title>
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/themes/default/assets/fonts/icons.woff2" as="font" crossorigin>
-    <link rel="preload" href="https://fonts.gstatic.com/s/lato/v24/S6uyw4BMUTPHjx4wXg.woff2" as="font" crossorigin>
-    
-    <!-- Semantic UI with local fallback -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" 
-          onerror="this.onerror=null;this.href='/spa/assets/semantic.min.css';">
-    
-    <!-- Alpine.js with version lock and local fallback -->
-    <script defer src="https://unpkg.com/alpinejs@3.14.8/dist/cdn.min.js"
-            onerror="this.onerror=null;this.src='/spa/assets/alpine.min.js';"></script>
+
+    <!-- Semantic UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.14.8/dist/cdn.min.js"></script>
 
     <style>
-        .preview-image {
-            max-width: 200px;
-            max-height: 200px;
-            margin-top: 10px;
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            min-height: 100vh;
         }
-        .error-text {
-            color: #db2828;
-            font-size: 0.9em;
+        
+        .navbar {
+            background-color: #1e293b;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            height: 70px;
+        }
+        
+        .logo {
+            height: 40px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .brand-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-left: 10px;
+            color: white;
+            letter-spacing: 1px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        
+        .page-title {
+            color: white;
+            text-align: center;
+            margin: 30px 0;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .shadow-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 40px;
+            left: 0;
+            background: rgba(79, 70, 229, 0.15);
+            filter: blur(70px);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .ui.card {
+            margin: 0 auto;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            background-color: #fff;
+            width: 100%;
+            border: none;
+        }
+        
+        .header-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 1rem;
+        }
+        
+        .header-icon {
+            background-color: #6366F1;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-size: 24px;
+        }
+        
+        h2 {
+            font-size: 28px;
+            color: #2d3748;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .ui.form .field label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-size: 15px;
+        }
+        
+        .ui.input input, .ui.textarea textarea {
+            border-radius: 12px;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .ui.input input:focus, .ui.textarea textarea:focus {
+            border-color: #6366F1;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+        }
+        
+        .field.error input, .field.error textarea {
+            border-color: #e53e3e;
+            background-color: #fff5f5;
+        }
+        
+        .error-message {
+            color: #e53e3e;
+            font-size: 14px;
             margin-top: 5px;
         }
         
-        /* Font fallbacks */
-        @font-face {
-            font-family: 'Lato';
-            font-display: swap;
-            src: local('Lato Regular'), local('Lato-Regular'),
-                 url('https://fonts.gstatic.com/s/lato/v24/S6uyw4BMUTPHjx4wXg.woff2') format('woff2');
+        .ui.button {
+            background-color: #6366F1;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 14px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.15);
         }
         
-        body {
-            font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        .ui.button:hover {
+            background-color: #4F46E5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(99, 102, 241, 0.2);
+        }
+        
+        .ui.button.disabled {
+            background-color: #CBD5E0;
+            box-shadow: none;
+        }
+        
+        .image-upload-area {
+            border: 2px dashed #CBD5E0;
+            border-radius: 12px;
+            padding: 2rem 1rem;
+            text-align: center;
+            background-color: #F7FAFC;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .image-upload-area:hover {
+            border-color: #6366F1;
+            background-color: #F0F5FF;
+        }
+        
+        .image-upload-icon {
+            font-size: 36px;
+            color: #6366F1;
+            margin-bottom: 1rem;
+        }
+        
+        .image-preview-container {
+            position: relative;
+            margin-top: 1rem;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .remove-image-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .ui.message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .ui.message.success {
+            background-color: #F0FFF4;
+            color: #2F855A;
+            border-left: 4px solid #48BB78;
+        }
+        
+        .ui.message.error {
+            background-color: #FFF5F5;
+            color: #C53030;
+            border-left: 4px solid #F56565;
+        }
+        
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        #imageInput {
+            display: none;
+        }
+        
+        .ui.right.labeled.input {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .ui.label {
+            background-color: #EDF2F7;
+            color: #4A5568;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        @media (max-width: 768px) {
+            .two-column-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="ui container" style="padding: 2rem;">
-        <div x-data="{
-            baseUrl: 'http://172.17.100.14:3377/default',
-            product: {
+
+    <h1 class="page-title">Product Management</h1>
+    
+    <div class="container" x-data="{
+
+        baseUrl: 'http://172.17.100.14:3356/cuanan5',
+        product: {
+            name: '',
+            description: '',
+            price: '',
+            stock: '',
+            image: null
+        },
+        imagePreview: null,
+        loading: false,
+        message: '',
+        messageType: '',
+        errors: {},
+        validateForm() {
+            this.errors = {};
+            if (!this.product.name) this.errors.name = 'Name is required';
+            if (!this.product.price) this.errors.price = 'Price is required';
+            if (this.product.price <= 0) this.errors.price = 'Price must be greater than 0';
+            if (!this.product.stock) this.errors.stock = 'Stock is required';
+            if (this.product.stock < 0) this.errors.stock = 'Stock cannot be negative';
+            return Object.keys(this.errors).length === 0;
+        },
+        handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    this.errors.image = 'Image size should be less than 5MB';
+                    event.target.value = '';
+                    return;
+                }
+                if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                    this.errors.image = 'Only JPG and PNG images are allowed';
+                    event.target.value = '';
+                    return;
+                }
+                const timestamp = new Date().getTime();
+                const fileExt = file.name.split('.').pop().toLowerCase();
+                const fileName = `product_${timestamp}.${fileExt}`;
+                this.product.image = new File([file], fileName, {
+                    type: file.type,
+                    lastModified: file.lastModified,
+                });
+                this.imagePreview = URL.createObjectURL(file);
+                this.errors.image = '';
+            }
+        },
+        async addProduct() {
+            if (!this.validateForm()) return;
+            this.loading = true;
+            this.message = '';
+            try {
+                const formData = new FormData();
+                formData.append('name', this.product.name);
+                formData.append('description', this.product.description);
+                formData.append('price', this.product.price);
+                formData.append('stock', this.product.stock);
+                if (this.product.image) {
+                    formData.append('image', this.product.image);
+                }
+
+                const response = await fetch(`${this.baseUrl}/api/products/`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.detail || data.error || 'Failed to add product');
+                }
+                this.message = 'Product added successfully!';
+                this.messageType = 'success';
+                this.clearForm();
+            } catch (error) {
+                this.message = 'Error: ' + error.message;
+                this.messageType = 'error';
+            } finally {
+                this.loading = false;
+            }
+        },
+        clearForm() {
+            this.product = {
                 name: '',
                 description: '',
                 price: '',
                 stock: '',
                 image: null
-            },
-            imagePreview: null,
-            loading: false,
-            message: '',
-            errors: {},
-            validateForm() {
-                this.errors = {};
-                if (!this.product.name) this.errors.name = 'Name is required';
-                if (!this.product.price) this.errors.price = 'Price is required';
-                if (this.product.price <= 0) this.errors.price = 'Price must be greater than 0';
-                if (!this.product.stock) this.errors.stock = 'Stock is required';
-                if (this.product.stock < 0) this.errors.stock = 'Stock cannot be negative';
-                return Object.keys(this.errors).length === 0;
-            },
-            handleImageUpload(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    // Validate file size (5MB limit)
-                    if (file.size > 5 * 1024 * 1024) {
-                        this.errors.image = 'Image size should be less than 5MB';
-                        event.target.value = '';
-                        return;
-                    }
-                    
-                    // Validate file type
-                    if (!['image/jpeg', 'image/png'].includes(file.type)) {
-                        this.errors.image = 'Only JPG and PNG images are allowed';
-                        event.target.value = '';
-                        return;
-                    }
-            
-                    // Generate a clean filename with timestamp
-                    const timestamp = new Date().getTime();
-                    const fileExt = file.name.split('.').pop().toLowerCase();
-                    const fileName = `product_${timestamp}.${fileExt}`;
-            
-                    // Create new File object with clean name
-                    this.product.image = new File([file], fileName, {
-                        type: file.type,
-                        lastModified: file.lastModified,
-                    });
-            
-                    // Create preview
-                    this.imagePreview = URL.createObjectURL(file);
-                    this.errors.image = '';
-                    
-                    console.log('Image prepared:', {
-                        originalName: file.name,
-                        newName: fileName,
-                        type: file.type,
-                        size: file.size
-                    });
-                }
-            },
-            async addProduct() {
-                if (!this.validateForm()) return;
-                
-                this.loading = true;
-                try {
-                    const formData = new FormData();
-                    formData.append('name', this.product.name);
-                    formData.append('description', this.product.description);
-                    formData.append('price', this.product.price);
-                    formData.append('stock', this.product.stock);
-                    
-                    if (this.product.image) {
-                        formData.append('image', this.product.image);
-                        console.log('Uploading image:', {
-                            name: this.product.image.name,
-                            type: this.product.image.type,
-                            size: this.product.image.size
-                        });
-                    }
-
-                    const response = await fetch(`${this.baseUrl}/api/products/`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const data = await response.json();
-                    console.log('Server response:', data);
-                    
-                    if (!response.ok) {
-                        throw new Error(data.detail || data.error || 'Failed to add product');
-                    }
-
-                    // Log the created product details
-                    console.log('Created product:', {
-                        id: data.id,
-                        name: data.name,
-                        image: data.image
-                    });
-                    
-                    this.message = 'Product added successfully!';
-                    this.clearForm();
-                } catch (error) {
-                    console.error('Error:', error);
-                    this.message = 'Error: ' + error.message;
-                } finally {
-                    this.loading = false;
-                }
-            },
-            clearForm() {
-                this.product = {
-                    name: '',
-                    description: '',
-                    price: '',
-                    stock: '',
-                    image: null
-                };
-                this.imagePreview = null;
-                this.errors = {};
-                document.getElementById('imageInput').value = '';
-            },
-            clearImage() {
-                this.product.image = null;
-                this.imagePreview = null;
-                this.errors.image = '';
-                document.getElementById('imageInput').value = '';
-            }
-        }">
-            <div class="ui card fluid">
-                <div class="content">
-                    <div class="header">Add New Product</div>
+            };
+            this.imagePreview = null;
+            this.errors = {};
+            document.getElementById('imageInput').value = '';
+        },
+        clearImage() {
+            this.product.image = null;
+            this.imagePreview = null;
+            this.errors.image = '';
+            document.getElementById('imageInput').value = '';
+        },
+        triggerImageUpload() {
+            document.getElementById('imageInput').click();
+        }
+    }">
+        <div class="shadow-effect"></div>
+        <div class="ui card">
+            <div class="header-section">
+                <div class="header-icon">
+                    <i class="plus icon"></i>
                 </div>
-                
-                <div class="content">
-                    <form class="ui form" x-on:submit.prevent="addProduct" enctype="multipart/form-data">
-                        <!-- Product Name -->
-                        <div class="field" x-bind:class="{ 'error': errors.name }">
-                            <label>Product Name</label>
-                            <input type="text" x-model="product.name" placeholder="Enter product name" required>
-                            <div class="error-text" x-show="errors.name" x-text="errors.name"></div>
-                        </div>
+                <h2>Add New Product</h2>
+            </div>
 
-                        <!-- Description -->
-                        <div class="field">
-                            <label>Description</label>
-                            <textarea x-model="product.description" rows="3"></textarea>
-                        </div>
-
-                        <!-- Price and Stock -->
-                        <div class="two fields">
-                            <div class="field" x-bind:class="{ 'error': errors.price }">
-                                <label>Price</label>
-                                <div class="ui right labeled input">
-                                    <div class="ui label">$</div>
-                                    <input type="number" step="0.01" min="0.01" x-model="product.price" required>
-                                </div>
-                                <div class="error-text" x-show="errors.price" x-text="errors.price"></div>
-                            </div>
-                            <div class="field" x-bind:class="{ 'error': errors.stock }">
-                                <label>Stock</label>
-                                <input type="number" min="0" x-model="product.stock" required>
-                                <div class="error-text" x-show="errors.stock" x-text="errors.stock"></div>
-                            </div>
-                        </div>
-
-                        <!-- Image Upload -->
-                        <div class="field" x-bind:class="{ 'error': errors.image }">
-                            <label>Product Image</label>
-                            <div class="ui action input">
-                                <input type="file" 
-                                       id="imageInput"
-                                       accept="image/jpeg,image/png"
-                                       @change="handleImageUpload"
-                                       style="display: none">
-                                <label for="imageInput" class="ui icon button">
-                                    <i class="upload icon"></i>
-                                    Choose Image
-                                </label>
-                                <div class="ui basic label" x-text="product.image ? product.image.name : 'No file chosen'"></div>
-                            </div>
-                            <div class="error-text" x-show="errors.image" x-text="errors.image"></div>
-                            
-                            <!-- Image Preview -->
-                            <div x-show="imagePreview" class="ui segment" style="margin-top: 1rem; position: relative;">
-                                <img :src="imagePreview" 
-                                     class="preview-image"
-                                     style="max-width: 200px; max-height: 200px; object-fit: contain;">
-                                <button type="button"
-                                        class="ui red mini icon button"
-                                        @click.prevent="clearImage"
-                                        style="position: absolute; top: 0.5rem; right: 0.5rem;">
-                                    <i class="times icon"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button class="ui primary fluid button" 
-                                x-bind:class="{ 'loading': loading, 'disabled': loading }"
-                                type="submit">
-                            Add Product
-                        </button>
-                    </form>
+            <form class="ui form" x-on:submit.prevent="addProduct" enctype="multipart/form-data">
+                <!-- Product Name -->
+                <div class="field" x-bind:class="{ 'error': errors.name }">
+                    <label>Product Name</label>
+                    <input type="text" x-model="product.name" placeholder="Enter product name" required>
+                    <div x-show="errors.name" class="error-message" x-text="errors.name"></div>
                 </div>
 
-                <!-- Message Display -->
-                <div class="extra content" x-show="message">
-                    <div class="ui message" 
-                         x-text="message"
-                         x-bind:class="{ 
-                             'positive': message.includes('successfully'), 
-                             'negative': message.includes('Error') || message.includes('Failed') 
-                         }">
+                <!-- Description -->
+                <div class="field">
+                    <label>Description</label>
+                    <textarea x-model="product.description" rows="3" placeholder="Describe your product..."></textarea>
+                </div>
+
+                <!-- Price and Stock -->
+                <div class="two-column-grid">
+                    <div class="field" x-bind:class="{ 'error': errors.price }">
+                        <label>Price</label>
+                        <div class="ui right labeled input">
+                            <div class="ui label">$</div>
+                            <input type="number" step="0.01" min="0.01" x-model="product.price" required placeholder="0.00">
+                        </div>
+                        <div x-show="errors.price" class="error-message" x-text="errors.price"></div>
+                    </div>
+                    <div class="field" x-bind:class="{ 'error': errors.stock }">
+                        <label>Stock</label>
+                        <input type="number" min="0" x-model="product.stock" required placeholder="0">
+                        <div x-show="errors.stock" class="error-message" x-text="errors.stock"></div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Image Upload -->
+                <div class="field" x-bind:class="{ 'error': errors.image }">
+                    <label>Product Image</label>
+                    <input type="file" id="imageInput" accept="image/jpeg,image/png" @change="handleImageUpload">
+                    
+                    <div x-show="!imagePreview" class="image-upload-area" @click="triggerImageUpload">
+                        <div class="image-upload-icon">
+                            <i class="image outline icon"></i>
+                        </div>
+                        <p>Click here to upload JPG or PNG image (Max 5MB)</p>
+                    </div>
+                    
+                    <div x-show="errors.image" class="error-message" x-text="errors.image"></div>
+
+                    <div x-show="imagePreview" class="image-preview-container">
+                        <img :src="imagePreview" class="image-preview">
+                        <button type="button" class="remove-image-btn" @click.prevent="clearImage">
+                            <i class="times icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="ui button" x-bind:class="{ 'disabled': loading }" type="submit">
+                    <i class="save icon"></i>
+                    <span x-text="loading ? 'Adding Product...' : 'Add Product'"></span>
+                </button>
+
+                <!-- Success/Error Message -->
+                <div x-show="message" class="ui message" :class="messageType" x-text="message"></div>
+            </form>
         </div>
     </div>
 </body>
